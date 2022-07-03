@@ -6,9 +6,7 @@ function createElement(element, attribute, inner) {
   const newElement = document.createElement(element);
 
   Object.keys(attribute || {}).forEach((attr_name) => {
-
     if (attr_name === "classList") {
-
       (attribute[attr_name] || []).forEach((class_name) => {
         newElement.classList.add(class_name);
       });
@@ -25,7 +23,6 @@ function createElement(element, attribute, inner) {
     (attribute[attr_name] || []).forEach((name) => {
       newElement.setAttribute(attr_name, name);
     });
-
   });
 
   (inner || []).forEach((text) => {
@@ -37,11 +34,10 @@ function createElement(element, attribute, inner) {
   });
 
   return newElement;
-
 }
 
 function createRightProp(klass, arrignore) {
-  const name = Object.keys(klass).find(prop => prop === "name");
+  const name = Object.keys(klass).find((prop) => prop === "name");
   const klass_name = klass[name];
 
   const arrProp = Object.keys(klass).filter((prop) => {
@@ -58,27 +54,41 @@ function createRightProp(klass, arrignore) {
   });
 
   return {
-    'klass_name': klass_name,
-    'obj_name': klass.constructor.name,
-    'obj_prop': objProp,
+    klass_name: klass_name,
+    obj_name: klass.constructor.name,
+    obj_prop: objProp,
   };
-
-
 }
 
 function createInfoBlock(name, arguments, class_name) {
   const arr = [];
-  Object.keys(arguments || {}).forEach(arg_name =>
-    arr.push(createElement('p', {}, [`${capitalLetter(arg_name)}: ${arguments[arg_name]}`]))
+  Object.keys(arguments || {}).forEach((arg_name) =>
+    arr.push(
+      createElement("p", {}, [
+        `${capitalLetter(arg_name)}: ${arguments[arg_name]}`,
+      ])
+    )
   );
 
-  const newElement = createElement('div', {
-    classList: ['info__block'],
-    id: [arguments.id],
-    // klass: [class_name],
-  }, [createElement('h3', {}, [name]), ...arr, createElement('button', {
-    onclick: [addIdToInput],
-  }, ['+'])]);
+  const newElement = createElement(
+    "div",
+    {
+      classList: ["info__block"],
+      id: [arguments.id],
+      // klass: [class_name],
+    },
+    [
+      createElement("h3", {}, [name]),
+      ...arr,
+      createElement(
+        "button",
+        {
+          onclick: [addIdToInput],
+        },
+        ["+"]
+      ),
+    ]
+  );
 
   infoBox.prepend(newElement);
 }
@@ -86,11 +96,8 @@ function createInfoBlock(name, arguments, class_name) {
 function updateInfoBlock(div, klass, updateignore) {
   const obj_prop = createRightProp(klass, updateignore).obj_prop;
   (div.childNodes || []).forEach((child) => {
-
-    if (child.nodeName === 'P') {
-
+    if (child.nodeName === "P") {
       Object.keys(obj_prop || {}).forEach((prop) => {
-
         if (child.innerHTML.includes(capitalLetter(prop))) {
           child.innerHTML = `${capitalLetter(prop)}: ${obj_prop[prop]}`;
           return;
@@ -109,12 +116,12 @@ function uncapitalLetter(message) {
 }
 
 function addIdToInput(event) {
-  const div = event.target.closest('div');
+  const div = event.target.closest("div");
   const div_id = div.id;
   // const div_klass = div.getAttribute('klass');
 
   // const arr = arrayOfMemory[uncapitalLetter(div_klass)];
   // const klass = arr.find(elem => elem.id == div_id);
 
-  inputString.value = inputString.value + ' ' + div_id;
+  inputString.value = inputString.value + " " + div_id;
 }
